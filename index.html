@@ -21,9 +21,12 @@
             color: var(--text-white);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            justify-content: flex-start; /* 改为从顶部开始排列 */
+            padding: 120px 20px 60px; /* 顶部预留120px给悬浮头像 */
+            overflow-y: auto;
+            overflow-x: hidden;
             background: radial-gradient(circle at center, #1c252e 0%, #0f141a 100%);
         }
 
