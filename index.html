@@ -45,6 +45,38 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .portrait-container {
+            width: 140px;
+            height: 140px;
+            margin: -90px auto 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .portrait {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--primary-gold);
+            box-shadow: 0 0 30px var(--accent-glow);
+            background: #1c252e;
+        }
+
+        .portrait-container::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1px dashed var(--primary-gold);
+            animation: rotate 15s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         h1 {
             color: var(--primary-gold);
             text-align: center;
@@ -146,6 +178,9 @@
 <body>
 
     <div class="container">
+        <div class="portrait-container">
+            <img src="PastedGraphic.png" alt="李昕玥" class="portrait">
+        </div>
         <h1>星语珠辉</h1>
         
         <div id="content">
