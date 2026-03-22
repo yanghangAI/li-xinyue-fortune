@@ -123,6 +123,53 @@
             color: #ccc;
         }
 
+        /* 智慧阁样式 */
+        .wisdom-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(242, 201, 76, 0.1);
+        }
+        .wisdom-title {
+            color: var(--primary-gold);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .wisdom-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(242, 201, 76, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .wisdom-input:focus {
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 10px rgba(242, 201, 76, 0.2);
+        }
+        #wisdom-result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(242, 201, 76, 0.05);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: #ddd;
+            display: none;
+            line-height: 1.6;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         @keyframes containerFade {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -315,7 +362,16 @@
         </div>
 
         <button class="btn" onclick="drawFortune()">立即抽取今日灵签</button>
-        <button class="btn" style="opacity:0.5; margin-top:10px" onclick="location.reload()">重新开启分析</button>
+        
+        <!-- 智慧阁模块 -->
+        <div class="wisdom-section">
+            <div class="wisdom-title">✨ 昕玥智慧阁</div>
+            <textarea class="wisdom-input" id="wisdom-input" placeholder="输入你想请教的难题或算式..." rows="3"></textarea>
+            <button class="btn" style="background:transparent; border:1px solid var(--primary-gold); margin-top:10px; font-size:0.9rem" onclick="seekWisdom()">向明珠求教</button>
+            <div id="wisdom-result"></div>
+        </div>
+
+        <button class="btn" style="opacity:0.5; margin-top:20px" onclick="location.reload()">重新开启分析</button>
     </div>
 
     <!-- 抽签弹窗 -->
@@ -377,7 +433,44 @@
             }, 500);
         }
 
-        // 3. 背景粒子效果
+        // 3. 智慧阁解答逻辑
+        function seekWisdom() {
+            const input = document.getElementById('wisdom-input').value.trim();
+            const resDiv = document.getElementById('wisdom-result');
+            
+            if (!input) return;
+
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = "<span style='color:var(--primary-gold)'>正在为您拨动神珠灵感...</span>";
+
+            setTimeout(() => {
+                // 检查是否为数学表达式
+                let resultText = "";
+                try {
+                    // 仅允许基础数学运算以保证安全
+                    if (/^[\d+\-*/().\s]+$/.test(input)) {
+                        const calculated = eval(input);
+                        resultText = `<b>神珠拨算结果：</b> <span style='color:var(--primary-gold); font-size:1.2rem'>${calculated}</span><br><br><small>“万物皆数，木火通明之势助你思路清晰。”</small>`;
+                    } else {
+                        const tips = [
+                            "此题关键在于‘破晓’之势，试着从头审视最基础的定义。",
+                            "玥珠内敛，建议你静心默读题目三遍，答案自会浮现。",
+                            "与其苦思冥想，不如借‘木’之稳健，先列出所有已知条件。",
+                            "灵感如‘火’，此刻不宜强攻，稍作休息，答案会自然跳出。",
+                            "题意如海，昕玥如珠。试着把复杂问题拆解成几个小珠子来解决。",
+                            "‘木火通明’预示你此刻逻辑感极强，顺着直觉去推演试试。"
+                        ];
+                        const randomTip = tips[Math.floor(Math.random() * tips.length)];
+                        resultText = `<b>明珠启思：</b><br>${randomTip}`;
+                    }
+                } catch (e) {
+                    resultText = "明珠略有蒙尘，请检查您的算式是否正确输入。";
+                }
+                resDiv.innerHTML = resultText;
+            }, 1000);
+        }
+
+        // 4. 背景粒子效果
         function initParticles() {
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
